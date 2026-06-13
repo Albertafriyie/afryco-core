@@ -1,5 +1,8 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import "react-phone-number-input/style.css";
+import PhoneInput, { Value } from "react-phone-number-input";
+type E164Number = Value;
 
 import {
   FormControl,
@@ -57,24 +60,43 @@ const RenderField = <TFieldValues extends FieldValues>({
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex rounded-md border border-input bg-background pl-3 items-center gap-2">
+        <div className="flex rounded-md border border-dark-500  border-input bg-dark-400 pl-3 items-center gap-2">
           {props.iconSrc && (
             <Image
               src={props.iconSrc}
               alt={props.iconAlt || "Icon"}
               width={24}
               height={24}
-              className="w-5 h-5"
+              className="w-5 h-5 ml-2"
               priority
             />
           )}
-          <Input
-            type="text"
-            placeholder={props.placeholder || "John Doe"}
-            {...field}
-          />
+          <FormControl>
+            <Input
+              type="text"
+              placeholder={props.placeholder || "John Doe"}
+              {...field}
+              className="shad-input border-0"
+            />
+          </FormControl>
         </div>
       );
+
+    case FormFieldType.PHONE_INPUT:
+      return (
+        <FormControl>
+          <PhoneInput
+            defaultCountry="GH"
+            placeholder={props.placeholder || "(+233) 24 123 4567"}
+            international
+            withCountryCallingCode
+            value={field.value as E164Number | undefined}
+            onChange={field.onChange}
+            className="input-phone"
+          />
+        </FormControl>
+      );
+
     default:
       return null;
   }

@@ -419,3 +419,23 @@
     @apply font-sans;
   }
 }
+
+.input-phone {
+  display: flex;
+  align-items: center;
+  border-radius: 0.375rem;
+}
+
+.input-phone select {
+  background-color: #1a1d21;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 4px;
+  border: none;
+  outline: none;
+}
+
+.input-phone select option {
+  background-color: #1a1d21;
+  color: #ffffff;
+}

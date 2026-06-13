@@ -8,14 +8,12 @@ import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 
 const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, "Bug title must be at least 5 characters.")
-    .max(32, "Bug title must be at most 32 characters."),
+  title: z.string().min(5, "Bug title must be at least 5 characters."),
   description: z
     .string()
-    .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
+    .min(20, "Description must be at least 20 characters."),
+  email: z.string().min(5, "Please enter a valid email address."),
+  phone: z.string().min(10, "Please enter a valid phone number."),
 });
 
 const PatientForm = () => {
@@ -24,6 +22,8 @@ const PatientForm = () => {
     defaultValues: {
       title: "",
       description: "",
+      email: "",
+      phone: "",
     },
   });
 
@@ -44,9 +44,28 @@ const PatientForm = () => {
           fieldType={FormFieldType.INPUT}
           label="Full name"
           placeholder="John Doe"
-          iconSrc="/icons/user.svg"
+          iconSrc="\assets\icons\user.svg"
           iconAlt="User icon"
         />
+
+        <CustomFormField
+          control={form.control}
+          name="email"
+          fieldType={FormFieldType.INPUT}
+          label="Email"
+          placeholder="johndoe@example.com"
+          iconSrc="\assets\icons\email.svg"
+          iconAlt="Email icon"
+        />
+
+        <CustomFormField
+          control={form.control}
+          name="phone"
+          fieldType={FormFieldType.PHONE_INPUT}
+          label="Phone Number"
+          placeholder="(+233) 24 123 4567"
+        />
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
