@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
@@ -19,7 +18,6 @@ const PatientForm = () => {
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
       username: "",
-      description: "",
       email: "",
       phone: "",
     },
@@ -33,32 +31,54 @@ const PatientForm = () => {
     setIsLoading(true);
     try {
       const userData = {
-        username,
+        name: username,
         email,
         phone,
       };
       const user = await createUser(userData);
 
-      if (user) router.push(`/patients/${user.id}/register`);
+      if (user) {
+        router.push(`/patients/${user.$id}/register`);
+      } else {
+        setIsLoading(false);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Form submission failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("🔘 Submit button was physically clicked!");
+
+          console.log("📝 Current Form Values:", form.getValues());
+
+          form.handleSubmit(onSubmit, (validationErrors) => {
+            console.error(
+              "❌ Form Validation Failed! Reason:",
+              validationErrors,
+            );
+          })(e);
+        }}
+        className="space-y-6 flex-1"
+      >
         <section className="mb-12 space-y-4">
           <h1 className="header">Hi there 🖐️</h1>
           <p className="text-dark-700">Schedule your first appointment.</p>
         </section>
+
         <CustomFormField
           control={form.control}
           name="username"
           fieldType={FormFieldType.INPUT}
           label="Full name"
           placeholder="John Doe"
-          iconSrc="\assets\icons\user.svg"
+          iconSrc="/assets/icons/user.svg"
           iconAlt="User icon"
         />
 
@@ -68,7 +88,7 @@ const PatientForm = () => {
           fieldType={FormFieldType.INPUT}
           label="Email"
           placeholder="johndoe@example.com"
-          iconSrc="\assets\icons\email.svg"
+          iconSrc="/assets/icons/email.svg"
           iconAlt="Email icon"
         />
 
