@@ -6,29 +6,43 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
-
-const formSchema = z.object({
-  title: z.string().min(5, "Bug title must be at least 5 characters."),
-  description: z
-    .string()
-    .min(20, "Description must be at least 20 characters."),
-  email: z.string().min(5, "Please enter a valid email address."),
-  phone: z.string().min(10, "Please enter a valid phone number."),
-});
+import SubmitButton from "../SubmitButton";
+import { useState } from "react";
+import { UserFormValidation } from "@/lib/validation";
+import { useRouter } from "next/navigation";
+import { createUser } from "@/lib/actions/patient.action";
 
 const PatientForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm<z.infer<typeof UserFormValidation>>({
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      title: "",
+      username: "",
       description: "",
       email: "",
       phone: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit({
+    username,
+    email,
+    phone,
+  }: z.infer<typeof UserFormValidation>) {
+    setIsLoading(true);
+    try {
+      const userData = {
+        username,
+        email,
+        phone,
+      };
+      const user = await createUser(userData);
+
+      if (user) router.push(`/patients/${user.id}/register`);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -40,7 +54,7 @@ const PatientForm = () => {
         </section>
         <CustomFormField
           control={form.control}
-          name="title"
+          name="username"
           fieldType={FormFieldType.INPUT}
           label="Full name"
           placeholder="John Doe"
@@ -66,7 +80,7 @@ const PatientForm = () => {
           placeholder="(+233) 24 123 4567"
         />
 
-        <Button type="submit">Submit</Button>
+        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
       </form>
     </Form>
   );
