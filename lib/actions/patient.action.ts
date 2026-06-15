@@ -2,6 +2,7 @@
 
 import { ID, Query, AppwriteException } from "node-appwrite";
 import { users } from "../appwrite.config";
+import { parseStringify } from "../utils";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
@@ -13,16 +14,26 @@ export const createUser = async (user: CreateUserParams) => {
       user.name,
     );
 
-    return JSON.parse(JSON.stringify(newUser)) as User;
+    return parseStringify(newUser);
   } catch (error) {
     if (error instanceof AppwriteException && error?.code === 409) {
       const documents = await users.list({
         queries: [Query.equal("email", user.email)],
       });
 
-      return JSON.parse(JSON.stringify(documents?.users[0])) as User;
+      return parseStringify(documents?.users[0]);
     }
 
     console.error("Error creating user:", error);
+  }
+};
+
+export const getUser = async (userId: string) => {
+  try {
+    const user = await users.get(userId);
+
+    return parseStringify(user);
+  } catch (error) {
+    console.log("Error fetching user details:", error);
   }
 };
