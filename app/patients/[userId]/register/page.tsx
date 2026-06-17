@@ -13,14 +13,14 @@ const Register = async ({ params }: SearchParamProps) => {
   }
 
   return (
-    <div className="flex h-screen max-h-screen">
-      <section className="remove-scrollbar container my-auto">
-        <div className="sub-container max-w-[496px]">
+    <div className="flex h-screen w-screen max-h-screen overflow-hidden bg-dark-300">
+      <section className="remove-scrollbar w-full md:w-[55%] h-full overflow-y-auto px-6 py-10 sm:px-10 flex flex-col justify-between">
+        <div className="sub-container max-w-[580px] w-full mx-auto my-auto">
           <Image
             src="/assets/icons/logo-full.svg"
             height={1000}
             width={1000}
-            alt="patient"
+            alt="patient logo"
             className="mb-12 h-10 w-fit"
             priority
           />
@@ -35,14 +35,16 @@ const Register = async ({ params }: SearchParamProps) => {
           </div>
         </div>
       </section>
-      <Image
-        src="/assets/images/register-img.jpg"
-        height={1000}
-        width={1000}
-        alt="patient"
-        className="side-img max-w-[750px]"
-        priority
-      />
+      <div className="hidden h-full md:block md:w-[45%] relative border-l border-dark-500 bg-dark-300">
+        <Image
+          src="/assets/images/register-img.jpg"
+          fill
+          alt="patient profile side art"
+          className="side-img object-cover"
+          sizes="(max-width: 768px) 0vw, 45vw"
+          priority
+        />
+      </div>
     </div>
   );
 };
