@@ -11,7 +11,12 @@ import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { registerPatient } from "@/lib/actions/patient.action";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Doctors, GenderOptions, IdentificationTypes } from "@/constants";
+import {
+  Doctors,
+  GenderOptions,
+  IdentificationTypes,
+  PatientFormDefaultValues,
+} from "@/constants";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
@@ -31,28 +36,10 @@ const RegisterForm = ({ user }: { user: User }) => {
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
-      username: user.name || "",
-      email: user.email || "",
-      phone: user.phone || "",
-      birthDate: new Date(),
-      gender: "Male" as "Male" | "Female" | "Other",
-      address: "",
-      occupation: "",
-      emergencyContactName: "",
-      emergencyContactNumber: "",
-      primaryPhysician: "",
-      insuranceProvider: "",
-      insurancePolicyNumber: "",
-      allergies: "",
-      currentMedication: "",
-      familyMedicalHistory: "",
-      pastMedicalHistory: "",
-      identificationType: "",
-      identificationNumber: "",
-      identificationDocument: [],
-      privacyConsent: false,
-      treatmentConsent: false,
-      disclosureConsent: false,
+      ...PatientFormDefaultValues,
+      username: user?.name || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
     },
   });
 
@@ -92,6 +79,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent: values.privacyConsent || false,
         treatmentConsent: values.treatmentConsent || false,
         disclosureConsent: values.disclosureConsent || false,
+        userConsent: values.privacyConsent && values.treatmentConsent,
       };
 
       const patient = await registerPatient(patientData);

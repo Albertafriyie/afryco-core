@@ -13,9 +13,9 @@ const Register = async ({ params }: SearchParamProps) => {
   }
 
   return (
-    <div className="flex h-screen w-screen max-h-screen overflow-hidden bg-dark-300">
-      <section className="remove-scrollbar w-full md:w-[55%] h-full overflow-y-auto px-6 py-10 sm:px-10 flex flex-col justify-between">
-        <div className="sub-container max-w-[580px] w-full mx-auto my-auto">
+    <div className="flex h-screen w-screen max-h-screen">
+      <section className="remove-scrollbar container">
+        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
           <Image
             src="/assets/icons/logo-full.svg"
             height={1000}
@@ -27,24 +27,18 @@ const Register = async ({ params }: SearchParamProps) => {
 
           <RegisterForm user={user} />
 
-          <div className="text-14-regular mt-20 flex justify-between">
-            <p className="justify-items-end text-dark-600 xl:text-left">
-              © 2026 Afryco Core
-            </p>
-            <Link href="/?admin=true" className="text-green-500"></Link>
-          </div>
+          <p className="copyright py-12">© 2026 Afryco Core</p>
         </div>
       </section>
-      <div className="hidden h-full md:block md:w-[45%] relative border-l border-dark-500 bg-dark-300">
-        <Image
-          src="/assets/images/register-img.jpg"
-          fill
-          alt="patient profile side art"
-          className="side-img object-cover"
-          sizes="(max-width: 768px) 0vw, 45vw"
-          priority
-        />
-      </div>
+
+      <Image
+        src="/assets/images/register-img.png"
+        alt="patient profile side art"
+        className="side-img max-w-[390px]"
+        height={1000}
+        width={1000}
+        priority
+      />
     </div>
   );
 };

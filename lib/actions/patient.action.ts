@@ -49,6 +49,7 @@ export const getUser = async (userId: string) => {
 // ==========================================
 export const registerPatient = async ({
   identificationDocument,
+  gender,
   ...patient
 }: RegisterUserParams) => {
   try {
@@ -74,8 +75,10 @@ export const registerPatient = async ({
       collectionId: process.env.PATIENT_TABLE_ID!,
       documentId: ID.unique(),
       data: {
-        identificationItemId: file?.$id || null,
-        identificationItemUrl: file?.$id
+        ...patient,
+        gender: gender.toLowerCase(),
+        identificationDocumentId: file?.$id || null,
+        identificationDocumentUrl: file?.$id
           ? `${process.env.NEXT_PUBLIC_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view?project=${process.env.PROJECT_ID}`
           : null,
         ...patient,

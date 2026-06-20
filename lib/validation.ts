@@ -42,20 +42,17 @@ export const PatientFormValidation = z.object({
     .optional(),
   emergencyContactName: z
     .string()
-    .min(2, "Emergency contact name must be at least 2 characters.")
-    .optional(),
+    .min(2, "Emergency contact name must be at least 2 characters."),
   emergencyContactNumber: z
     .string()
     .refine((phone) => /^\+?[1-9]\d{1,14}$/.test(phone), {
       message: "Please enter a valid emergency contact phone number.",
-    })
-    .optional(),
+    }),
   primaryPhysician: z
     .string()
-    .min(2, "Please select at least one primary physician.")
-    .optional(),
-  insuranceProvider: z.string().optional(),
-  insurancePolicyNumber: z.string().optional(),
+    .min(2, "Please select at least one primary physician."),
+  insuranceProvider: z.string(),
+  insurancePolicyNumber: z.string(),
   allergies: z.string().optional(),
   currentMedication: z.string().optional(),
   familyMedicalHistory: z.string().optional(),
