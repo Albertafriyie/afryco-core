@@ -32,13 +32,27 @@ export const createUser = async (user: CreateUserParams) => {
 };
 
 // ==========================================
-// 2. GET AUTH USER DETAILS
+// 2. GET AUTH USER & PATIENT DETAILS
 // ==========================================
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
 
     return parseStringify(user);
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+  }
+};
+
+export const getPatient = async (userId: string) => {
+  try {
+    const patients = await databases.listDocuments(
+      process.env.DATABASE_ID!,
+      process.env.PATIENT_TABLE_ID!,
+      [Query.equal("userId", userId)],
+    );
+
+    return parseStringify(patients.documents[0]);
   } catch (error) {
     console.error("Error fetching user details:", error);
   }
